@@ -7,18 +7,23 @@ contract Social {
     	uint id;
     	string name;
     }
-
-    mapping(uint => Person) public persons;
+    event signUpEvent(string personName);
+    Person[] public persons;
+    mapping(address =>uint) public users;
     uint public personcount;
 
     // Constructor
     constructor () public {
-        persons[0] = Person(0, "Aditya");
-    	personcount=1;
+        persons.push(Person(0, "Aditya"));
+        persons.push(Person(1, "Uday"));
+    	personcount=2;
     }
 
-    function addperson(string name) private{
-        persons[personcount] = Person(personcount, name);
+    function addperson(string name) public{
+        require(users[msg.sender] == 0, "User already exists");
+        persons.push(Person(personcount, name));
     	personcount ++;
+        users[msg.sender] = 1;
+        emit signUpEvent(name);
     }
 }

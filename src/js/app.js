@@ -26,18 +26,33 @@ App = {
       App.contracts.Social = TruffleContract(social);
       // Connect provider to interact with contract
       App.contracts.Social.setProvider(App.web3Provider);
-
+      App.listenForEvents();
       return App.render();
     });
   },
-
+  listenForEvents: function() {
+    App.contracts.Social.deployed().then(function(instance) {
+      // Restart Chrome if you are unable to receive this event
+      // This is a known issue with Metamask
+      // https://github.com/MetaMask/metamask-extension/issues/2393
+      instance.signUpEvent({}, {
+        fromBlock: 0,
+        toBlock: 'latest'
+      }).watch(function(error, event) {
+        console.log("event triggered", event)
+        // Reload when a new vote is recorded
+        App.render();
+      });
+    });
+  },
   render: function() {
     var socialInstance;
     var loader = $("#loader");
     var content = $("#content");
-
+    var signUpForm = $("#signUpForm");
     loader.show();
     content.hide();
+    signUpForm.hide();
 
     // Load account data
     web3.eth.getCoinbase(function(err, account) {
@@ -66,15 +81,34 @@ App = {
           candidatesResults.append(candidateTemplate);
         });
       }
-
+      return socialInstance.users(App.account);
+    }).then(function(hasSignedUp) {
+      console.log(hasSignedUp);
+      console.log("aaa");
+      if(!hasSignedUp.c[0]){
+        signUpForm.show();
+      }
       loader.hide();
       content.show();
     }).catch(function(error) {
       console.warn(error);
     });
+  },
+  castVote: function() {
+    var candidateId = $('#name').val();
+    console.log("Castvote")
+    App.contracts.Social.deployed().then(function(instance) {
+      return instance.addperson(candidateId, { from: App.account });
+    }).then(function(result) {
+      // Wait for votes to update
+      console.log("sucess");
+      $("#content").hide();
+      $("#loader").show();
+    }).catch(function(err) {
+      console.log(err);
+    });
   }
 };
-
 $(function() {
   $(window).load(function() {
     App.init();

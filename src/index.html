@@ -4,7 +4,7 @@
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Election Results</title>
+    <title>DappTwitter</title>
 
     <!-- Bootstrap -->
     <link href="css/bootstrap.min.css" rel="stylesheet">
@@ -34,6 +34,14 @@
             <p id="accountAddress" class="text-center"></p>
           </div>
         </div>
+      </div>
+      <div class="row">
+        <form id = "signUpForm" onSubmit="App.castVote(); return false;">
+          name:<br>
+          <input type="text" id="name" name="name" value="Mickey">
+          <br>
+          <button type="submit">Add</button>
+        </form>        
       </div>
     </div>
 
