@@ -59,7 +59,7 @@ App = {
         console.log("event triggered", event)
         // Reload when a new tweet is posted
         // App.addTweet(instance);
-        App.hideFollowButton(event.args.userId.c[0]);
+        App.hideFollowButton(event.args.userId.c[0],event.args.senderId);
       });
     });
   },
@@ -191,7 +191,7 @@ App = {
       console.log(err);
     });
   },
-  hideFollowButton: function(id){
+  hideFollowButton: function(id,id2){
     var idstring = "row" + id;
     App.contracts.Social.deployed().then(function(instance) {
       return instance.persons(parseInt(id)-1,{ from: App.account });
@@ -199,7 +199,10 @@ App = {
       console.log(document.getElementById(idstring))
       document.getElementById(idstring).innerHTML = result[2];
       idstring = "#"+id;
-      $(idstring).hide();
+      console.log(id2)
+      if(id2==App.account){
+        $(idstring).hide();
+      }
       App.switchViews(1);
     }).catch(function(err){
       console.log(err);

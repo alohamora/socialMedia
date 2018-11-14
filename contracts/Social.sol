@@ -18,7 +18,7 @@ contract Social {
 
     event signUpEvent(string personName);
     event tweetEvent();
-    event followEvent(uint userId,uint senderId);
+    event followEvent(uint userId,address senderId);
     Person[] public persons;
     Tweet[] public tweets;
 
@@ -51,6 +51,6 @@ contract Social {
     function followUser(uint userId) public{
         persons[userId-1].followers = persons[userId-1].followers + 1;
         persons[users[msg.sender]-1].following.push(userId);
-        emit followEvent(userId,users[msg.sender]);
+        emit followEvent(userId,msg.sender);
     }
 }
