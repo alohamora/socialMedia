@@ -3,13 +3,7 @@ var Social = artifacts.require("./Social.sol");
 contract("Social", function(accounts) {
   var electionInstance;
 
-  // it("initializes with two candidates", function() {
-  //   return Social.deployed().then(function(instance) {
-  //     return instance.candidatesCount();
-  //   }).then(function(count) {
-  //     assert.equal(count, 2);
-  //   });
-  // });
+
 
   // it("it initializes the candidates with the correct values", function() {
   //   return Social.deployed().then(function(instance) {
